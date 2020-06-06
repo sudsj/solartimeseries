@@ -7,7 +7,8 @@ from scipy.optimize import minimize
 # The data has been extracted from a website run by Energinet at the following link where time series data is publicly available:
 # /https://www.energidataservice.dk/dataset/electricitybalance
 
-tree = ET.parse('small.xml')
+# tree = ET.parse('small.xml')
+tree = ET.parse('exsmall.xml')
 root = tree.getroot()
 # print(root.tag)
 # iters = 0
@@ -31,7 +32,7 @@ for row in root.iter('row'):
             # print(element.text)
             strdktime = element.text
             dktime = int(strdktime[11:13])
-            if dktime > 20 or dktime < 6:
+            if dktime > 18 or dktime <= 6:
                 break
             else:
                 strtimes.append(strdktime)
@@ -44,15 +45,15 @@ for row in root.iter('row'):
             spower = float(element.text)
             solar.append(spower)
 
-sdata = pd.DataFrame(list(zip(solar,dktimes)),index=abstimes)
+sdata = pd.DataFrame(solar,index=abstimes)
 print(sdata)
 plt.figure(figsize=(15, 7))
 plt.xticks(abstimes, dktimes)
-ax = plt.gca()
-n = 5
-ax.set_xticks(ax.get_xticks()[::30])
+# ax = plt.gca()
+# n = 5
+# ax.set_xticks(ax.get_xticks()[::6])
 plt.plot(sdata)
-plt.title('Ads watched (hourly data)')
+plt.title('Solar Power production')
 plt.grid(True)
 plt.show()
 
@@ -60,6 +61,6 @@ plt.show()
 # plt.figure(figsize=(15, 7))
 
 # plt.plot(sdata)
-# plt.title('Ads watched (hourly data)')
+# plt.title('Solar Power production')
 # plt.grid(True)
 # plt.show()
